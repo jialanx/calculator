@@ -1,34 +1,41 @@
 
 const operators = ["^", "*", "/", "+", "-"];
-let input = "2^3+3";
+let input = "(2 * (1+ 3) + 2 * (20+3))-74";
 input = input.replaceAll(" ", "");
 
 console.log(input); 
-console.log(solve(input));
-
+console.log(findInnerEquation(input));
 
 function findInnerEquation(equation) {
-    let innerequation = equation;
-    let foundParenthesis = false;
+    let newEquation = ""; 
+    
+    for (let letterIndex in equation) { 
+        console.log(equation[letterIndex] + "   " + equation);
+        if (equation[letterIndex] == ")") {
 
-    if (equation.length == 0) {
-        return "";
-    } else {
-        for (let letterIndex in equation) {
-            if (equation[letterIndex] == ")" && foundParenthesis) {
-                return solve(innerequation) + findInnerEquation(innerequation);
-            } 
-            if (equation[letterIndex] == "(" && !foundParenthesis) {
-                foundParenthesis = true;
-                innerequation = "";
-            } 
-            if (foundParenthesis) {
-                innerEquation += equation[letterIndex];
+            console.log("end of inner eq returning: " + newEquation  + "   " + (Number(letterIndex)+1) + "        " + equation.length + "          " + equation.substring(Number(letterIndex)+1, equation.length));
+            return solve(newEquation) + equation.substring(Number(letterIndex)+1, equation.length);
+
+        } else if (equation[letterIndex] == "(") {
+
+            console.log("entering eq: " + equation.substring(Number(letterIndex) + 1, equation.length) +" after the current eq: " + equation + " letter index: " + (Number(letterIndex)+1) + " length: "+ equation.length);
+            newEquation += findInnerEquation(equation.substring(Number(letterIndex)+1, equation.length));
+            console.log("new eq: " + newEquation);
+
+
+            while (newEquation.includes(")")) {
+                newEquation = findInnerEquation(newEquation);
             }
-        }
+            console.log("no more!");
+            break;
+
+        } else {
+            newEquation += equation[letterIndex]; 
+            console.log("current eq after adding a letter: " + newEquation);
+        } 
     }
 
-    return solve(innerequation);
+    return solve(newEquation);
 }
  
 function solve(equation) {
@@ -42,17 +49,17 @@ function solve(equation) {
 
 function solveWithOperator(equation, operator) {
     let prevNum = "";
-    let nextNum = "";
+    let nextNum = ""; 
     let foundOperator = false;
-    let currentEquation = "";
+    let currentEquation = ""; 
 
     for (let letterIndex in equation) {
-        console.log("current letter: " + equation[letterIndex]);
+        //console.log("current letter: " + equation[letterIndex]);
         // if the letter is a number, add it to prev or next number depending if it is before or after an operator
         if (!operators.includes(equation[letterIndex])) {
             if (foundOperator) { 
                 nextNum += equation[letterIndex];
-                console.log("next number: " + nextNum + foundOperator);
+                //console.log("next number: " + nextNum + foundOperator);
             } else {
                 prevNum += equation[letterIndex];
             } 
@@ -63,7 +70,7 @@ function solveWithOperator(equation, operator) {
         } else {
             if (foundOperator) {
                 prevNum = calculate(prevNum, nextNum, operator);
-                console.log("calculted number of " +prevNum)
+                //console.log("calculted number of " +prevNum)
                 foundOperator = false;
                 nextNum = "";  
             } 
@@ -74,7 +81,7 @@ function solveWithOperator(equation, operator) {
                 prevNum = ""; 
             }
 
-            console.log("current equation: " + currentEquation);
+            //console.log("current equation: " + currentEquation);
         }
     }
 
