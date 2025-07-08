@@ -1,0 +1,64 @@
+* {
+    border: 1px solid red;
+}
+
+body {
+    width: 100vh;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    
+}
+
+#calculator-body {
+    padding: 20px;
+    background-color: blue;
+
+    width: 400px;
+    height: 400px;
+}
+
+#screen {
+    height: 50px;
+    width: 400px;
+    background-color: lightblue;
+    display: flex;
+    justify-content: right;
+    
+}
+
+#screen-text {
+   margin: auto 20px;
+   color: black;
+}
+
+#button-container {
+    margin-top: 20px;
+    width: 400px;
+    height: 300px;
+    display: wrap;
+
+}
+
+.operator {
+    margin: 5px;
+}
+
+.number-button {
+    margin: 5px;
+}
+
+button {
+    width: 80px;
+    height: 50px;
+
+}
+
+#enter {
+    width: 175px;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: lightcoral;
+}

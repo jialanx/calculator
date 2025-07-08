@@ -18,7 +18,7 @@ function check(equation) {
 
     if (equation.length == 0) return "No equation inputted";
     if (illegalBeginning.includes(equation[0])) return "Do not begin with an operator!";
-
+ 
     for (let letterIndex in equation) {
         if (operators.includes(prevLetter) && operators.includes(equation[letterIndex])) return "Invalid operator placement";
         if (!acceptableValues.includes(equation[letterIndex])) return "Your equation includes invalid characters";
