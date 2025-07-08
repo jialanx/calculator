@@ -1,6 +1,6 @@
 
 const operators = ["^", "*", "/", "+", "-"];
-let input = "(2 * (1+ 3) + 2 * (20+3))-74";
+let input = "(2 * (1+ 3) + 2 * (-20+3))-74^3"; 
 input = input.replaceAll(" ", "");
 
 console.log(input); 
@@ -10,39 +10,27 @@ function findInnerEquation(equation) {
     let newEquation = ""; 
     
     for (let letterIndex in equation) { 
-        console.log(equation[letterIndex] + "   " + equation);
         if (equation[letterIndex] == ")") {
-
-            console.log("end of inner eq returning: " + newEquation  + "   " + (Number(letterIndex)+1) + "        " + equation.length + "          " + equation.substring(Number(letterIndex)+1, equation.length));
+            console.log("solving " + newEquation+ " this equals: " + solve(newEquation) + " adding: " + equation.substring(Number(letterIndex)+1, equation.length) + " which results in: " + solve(newEquation) + equation.substring(Number(letterIndex)+1, equation.length));
             return solve(newEquation) + equation.substring(Number(letterIndex)+1, equation.length);
 
         } else if (equation[letterIndex] == "(") {
-
-            console.log("entering eq: " + equation.substring(Number(letterIndex) + 1, equation.length) +" after the current eq: " + equation + " letter index: " + (Number(letterIndex)+1) + " length: "+ equation.length);
             newEquation += findInnerEquation(equation.substring(Number(letterIndex)+1, equation.length));
-            console.log("new eq: " + newEquation); 
-
-
+            console.log("current equation: " + newEquation);
             while (newEquation.includes(")")) {
                 newEquation = findInnerEquation(newEquation);
-            }
-            console.log("no more!");
+            } 
             break;
-
         } else {
             newEquation += equation[letterIndex]; 
-            console.log("current eq after adding a letter: " + newEquation);
         } 
-    }
-
+    }   
     return solve(newEquation);
 }
  
 function solve(equation) {
     for (let operatorIndex in operators) {
-        console.log("parsing through operator: " + operators[operatorIndex] + " -----------------------------");
         equation = solveWithOperator(equation, operators[operatorIndex]);
-        console.log("current equation after parse: " + equation + " ---------------------------");
     }
     return equation;
 }
@@ -54,34 +42,35 @@ function solveWithOperator(equation, operator) {
     let currentEquation = ""; 
 
     for (let letterIndex in equation) {
-        //console.log("current letter: " + equation[letterIndex]);
         // if the letter is a number, add it to prev or next number depending if it is before or after an operator
         if (!operators.includes(equation[letterIndex])) {
             if (foundOperator) { 
                 nextNum += equation[letterIndex];
-                //console.log("next number: " + nextNum + foundOperator);
             } else {
                 prevNum += equation[letterIndex];
             } 
         } else if (prevNum == "") {
             // if its an operator and there is no existing number, it probably means its negative or positive! 
-            // make if statement in case * or / shows up
             prevNum += equation[letterIndex];
         } else {
             if (foundOperator) {
-                prevNum = calculate(prevNum, nextNum, operator);
-                //console.log("calculted number of " +prevNum)
-                foundOperator = false;
-                nextNum = "";  
-            } 
+                if (nextNum == "") {
+                    console.log("uh oh! next number is blank, i am currently looking at: " + equation[letterIndex]);
+                    nextNum += equation[letterIndex];
+                } else {
+                    prevNum = calculate(prevNum, nextNum, operator);
+                    foundOperator = false;
+                    nextNum = ""; 
+                } 
+            }  
+ 
             if (equation[letterIndex] == operator) {
                 foundOperator = true
-            } else {
+            } else if (!operators.includes(nextNum)) {
                 currentEquation += prevNum + equation[letterIndex];
-                prevNum = ""; 
+                prevNum = "";   
             }
 
-            //console.log("current equation: " + currentEquation);
         }
     }
 
