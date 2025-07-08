@@ -1,23 +1,22 @@
 const operators = ["^", "*", "/", "+", "-"]; // operators in order of PEMDAS
-let input = "3abc"; 
+let input = "2x2"; 
 input = input.replaceAll(" ", "");
+input = input.toLowerCase();
 
 console.log(input); // original equation
-
-let invalidEquation = check(input);
-
-if (!invalidEquation) {
-    console.log(findInnerEquation(input)); // solves equation
-} else {
-    console.log(invalidEquation);
-}
-
-// checks if the equation is valid
+//while (input != "no") {
+    console.log(check(input));
+//}
+ 
+// checks if the equation is valid 
 function check(equation) {
-    const acceptableValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "(", ")", "^", "*", "/", "+", "-"];
-    const illegalBeginning = ["^", "*", "/"];
+    const acceptableValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "(", ")", "^", "*", "/", "+", "-", "x"];
+    const illegalBeginning = ["^", "*", "/", "x"];
     let prevLetter;
-    
+    let editedEquation = ""; 
+    let parenthesisCounter = 0;
+
+    if (equation.length == 0) return "No equation inputted";
     if (illegalBeginning.includes(equation[0])) return "Do not begin with an operator!";
 
     for (let letterIndex in equation) {
@@ -25,9 +24,29 @@ function check(equation) {
         if (!acceptableValues.includes(equation[letterIndex])) return "Your equation includes invalid characters";
         if (operators.includes(equation[equation.length-1])) return "Your equation ends with an operator";
 
+        if (equation[letterIndex] == "(" && !operators.includes(prevLetter)) {
+            editedEquation += "*("
+            
+        } else if (equation[letterIndex] == "x") {
+            editedEquation += "*"
+        } else if (equation[letterIndex] == ")" && Number(equation[letterIndex])) { 
+            editedEquation += ")*";
+        } else {
+            editedEquation += equation[letterIndex];
+        } 
+        
+        if (equation[letterIndex] == "(") {
+            parenthesisCounter++;
+        } else if (equation[letterIndex] == ")") {
+            parenthesisCounter--;
+        }
+
         prevLetter = equation[letterIndex];
     }
-    return "";
+
+    if (parenthesisCounter != 0) return "# of Open and CLosed parenthesis don't match!";
+    console.log(editedEquation);
+    return findInnerEquation(editedEquation);
 }
 
 // searches the equation for parenthesis, uses recursion to solve each parenthesis
