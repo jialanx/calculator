@@ -20,7 +20,7 @@ function findInnerEquation(equation) {
 
             console.log("entering eq: " + equation.substring(Number(letterIndex) + 1, equation.length) +" after the current eq: " + equation + " letter index: " + (Number(letterIndex)+1) + " length: "+ equation.length);
             newEquation += findInnerEquation(equation.substring(Number(letterIndex)+1, equation.length));
-            console.log("new eq: " + newEquation);
+            console.log("new eq: " + newEquation); 
 
 
             while (newEquation.includes(")")) {
