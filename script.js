@@ -1,18 +1,66 @@
 const operators = ["^", "*", "/", "+", "-"]; // operators in order of PEMDAS
-let input = "2x2"; 
-input = input.replaceAll(" ", "");
-input = input.toLowerCase();
+const screen = document.getElementById("screen-text");
+const subtractButton = document.getElementById("minus");
+const addButton = document.getElementById("plus");
+const multiplyButton = document.getElementById("multiply");
+const divideButton = document.getElementById("divide");
+const oneButton = document.getElementById("one");
+const twoButton = document.getElementById("two");
+const threeButton = document.getElementById("three");
+const fourButton = document.getElementById("four");
+const fiveButton = document.getElementById("five");
+const sixButton = document.getElementById("six");
+const sevenButton = document.getElementById("seven");
+const eightButton = document.getElementById("eight");
+const nineButton = document.getElementById("nine");
+const zeroButton = document.getElementById("zero");
+const clearButton = document.getElementById("clear");
+const decimalButton = document.getElementById("decimal");
+const enterButton = document.getElementById("enter");
+const openParenthesisButton = document.getElementById("open-parenthesis");
+const endParenthesisButton = document.getElementById("end-parenthesis");
 
-console.log(input); // original equation
-//while (input != "no") {
-    console.log(check(input));
-//}
+oneButton.onclick = () => updateText("1");
+twoButton.onclick = () => updateText("2");
+threeButton.onclick = () => updateText("3");
+fourButton.onclick = () => updateText("4");
+fiveButton.onclick = () => updateText("5");
+sixButton.onclick = () => updateText("6");
+sevenButton.onclick = () => updateText("7");
+eightButton.onclick = () => updateText("8");
+nineButton.onclick = () => updateText("9");
+zeroButton.onclick = () => updateText("0");
+addButton.onclick = () => updateText("+");
+subtractButton.onclick = () => updateText("-");
+divideButton.onclick = () => updateText("/");
+multiplyButton.onclick = () => updateText("*");
+decimalButton.onclick = () => updateText(".");
+clearButton.onclick = clearInput;
+openParenthesisButton.onclick = () => updateText("(");
+endParenthesisButton.onclick = () => updateText(")");
+enterButton.onclick = calculateInput; 
+
+function calculateInput() {
+    screen.innerText = check(screen.innerText); 
+}
+
+function updateText(text) {
+    screen.innerText += text;
+}
+
+function clearInput() {
+    screen.innerText = "";
+}
+//let input = "1.1*2"; 
+//input = input.replaceAll(" ", "");
+//input = input.toLowerCase();
+//console.log(check(input));
  
 // checks if the equation is valid 
 function check(equation) {
-    const acceptableValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "(", ")", "^", "*", "/", "+", "-", "x"];
-    const illegalBeginning = ["^", "*", "/", "x"];
-    let prevLetter;
+    const acceptableValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "(", ")", "^", "*", "/", "+", "-", "."];
+    const illegalBeginning = ["^", "*", "/"];
+    let prevLetter = "";
     let editedEquation = ""; 
     let parenthesisCounter = 0;
 
@@ -21,15 +69,13 @@ function check(equation) {
  
     for (let letterIndex in equation) {
         if (operators.includes(prevLetter) && operators.includes(equation[letterIndex])) return "Invalid operator placement";
-        if (!acceptableValues.includes(equation[letterIndex])) return "Your equation includes invalid characters";
+        if (prevLetter == "." && equation[letterIndex] == ".") return "Invalid decimal placement";
+        if (!acceptableValues.includes(equation[letterIndex])) return "Invalid characters";
         if (operators.includes(equation[equation.length-1])) return "Your equation ends with an operator";
 
-        if (equation[letterIndex] == "(" && !operators.includes(prevLetter)) {
+        if (equation[letterIndex] == "(" && !operators.includes(prevLetter) && prevLetter != ")" && prevLetter != "") {
             editedEquation += "*("
-            
-        } else if (equation[letterIndex] == "x") {
-            editedEquation += "*"
-        } else if (equation[letterIndex] == ")" && Number(equation[letterIndex])) { 
+        } else if (equation[letterIndex] == ")" && Number(prevLetter) && equation[Number(letterIndex)+1]) { 
             editedEquation += ")*";
         } else {
             editedEquation += equation[letterIndex];
@@ -44,7 +90,7 @@ function check(equation) {
         prevLetter = equation[letterIndex];
     }
 
-    if (parenthesisCounter != 0) return "# of Open and CLosed parenthesis don't match!";
+    if (parenthesisCounter != 0) return "# of parenthesis invalid";
     console.log(editedEquation);
     return findInnerEquation(editedEquation);
 }
@@ -155,4 +201,4 @@ function calculate(numOne, numTwo, operator) {
         }
         return value;
     }
-}
+} 
