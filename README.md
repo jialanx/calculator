@@ -16,3 +16,5 @@ Features
 How It Works
 -----------------
 The calculator parses and evaluates string expressions in JavaScript. It uses recursive methods to handle parenthesis and an array to handle order of operations. I tried using multiple functions to reduce redundancy and increase modularity!
+
+> AI helped generate this README but I am really proud to say NONE of the actual code was done or helped by AI.
