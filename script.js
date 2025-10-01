@@ -190,15 +190,15 @@ function calculate(numOne, numTwo, operator) {
     numOne = Number(numOne); 
     numTwo = Number(numTwo);
     
-    if (operator == "*") return numOne * numTwo;
-    if (operator == "/") return numOne / numTwo;
-    if (operator == "+") return numOne + numTwo;
-    if (operator == "-") return numOne - numTwo;
+    if (operator == "*") return Number((numOne * numTwo).toFixed(10));
+    if (operator == "/") return Number((numOne / numTwo).toFixed(10));
+    if (operator == "+") return Number((numOne + numTwo).toFixed(10));
+    if (operator == "-") return Number((numOne - numTwo).toFixed(10));
     if (operator == "^") {
         let value = numOne; 
         for (let i = 1; i < numTwo; i++) {
             value *= numOne;
         }
-        return value;
+        return Number(value.toFixed(10));
     }
 } 
